@@ -1,0 +1,119 @@
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema">\
+  <xs:element name="DemandData">\
+    <xs:complexType>\
+      <xs:sequence>\
+        <xs:element name="RateInformation" minOccurs="1" maxOccurs="5000">\
+          <xs:complexType>\
+            <xs:all>\
+              <xs:element name="RateID" minOccurs="1" nillable="false" maxOccurs="1" />\
+              <xs:element name="AltRateName1" minOccurs="0" nillable="true" maxOccurs="1" />\
+              <xs:element name="AltRateName2" minOccurs="0" nillable="true" maxOccurs="1" />\
+              <xs:element name="SignupCloseDate" minOccurs="0" nillable="true" maxOccurs="1" />\
+              <xs:element name="RateName" minOccurs="1" nillable="false" maxOccurs="1" />\
+              <xs:element name="RatePlan_Url" minOccurs="0" nillable="true" maxOccurs="1" />\
+              <xs:element name="RateType" minOccurs="1" nillable="true" maxOccurs="1">\
+                <xs:simpleType>\
+                  <xs:restriction base="xsd:string">\
+                    <xs:enumeration value="R-D" />\
+                    <xs:enumeration value="C-D" />\
+                    <xs:enumeration value="V-D" />\
+                    <xs:enumeration value="CPP" />\
+                    <xs:enumeration value="VPP" />\
+                    <xs:enumeration value="RTP" />\
+                    <xs:enumeration value="DSR" />\
+                    <xs:enumeration value="TOU" />\
+                    <xs:enumeration value="T-D" />\
+                    <xs:enumeration value="GHG" />\
+                  </xs:restriction>\
+                </xs:simpleType>\
+              </xs:element>\
+              <xs:element name="Sector" minOccurs="0" nillable="true" maxOccurs="1">\
+                <xs:simpleType>\
+                  <xs:restriction base="xsd:string">\
+                    <xs:enumeration value="CEV" />\
+                    <xs:enumeration value="Ind" />\
+                    <xs:enumeration value="Res" />\
+                    <xs:enumeration value="Agr" />\
+                    <xs:enumeration value="All" />\
+                    <xs:enumeration value="REV" />\
+                    <xs:enumeration value="Com" />\
+                    <xs:enumeration value="CIA" />\
+                  </xs:restriction>\
+                </xs:simpleType>\
+              </xs:element>\
+              <xs:element name="API_Url" minOccurs="0" nillable="true" maxOccurs="1" />\
+              <xs:element name="EndUse" minOccurs="0" nillable="true" maxOccurs="1">\
+                <xs:simpleType>\
+                  <xs:restriction base="xsd:string">\
+                    <xs:enumeration value="All" />\
+                    <xs:enumeration value="EV" />\
+                    <xs:enumeration value="Other" />\
+                    <xs:enumeration value="Solar" />\
+                    <xs:enumeration value="Battery" />\
+                  </xs:restriction>\
+                </xs:simpleType>\
+              </xs:element>\
+              <xs:element name="ValueInformation">\
+                <xs:complexType>\
+                  <xs:sequence>\
+                    <xs:element name="ValueData" maxOccurs="50000">\
+                      <xs:complexType>\
+                        <xs:all>\
+                          <xs:element name="DateStart" minOccurs="1" nillable="false" maxOccurs="1" />\
+                          <xs:element name="DateEnd" minOccurs="1" nillable="false" maxOccurs="1" />\
+                          <xs:element name="DayStart" minOccurs="1" nillable="false" maxOccurs="1">\
+                            <xs:simpleType>\
+                              <xs:restriction base="xsd:string">\
+                                <xs:enumeration value="1" />\
+                                <xs:enumeration value="2" />\
+                                <xs:enumeration value="3" />\
+                                <xs:enumeration value="4" />\
+                                <xs:enumeration value="5" />\
+                                <xs:enumeration value="6" />\
+                                <xs:enumeration value="7" />\
+                                <xs:enumeration value="8" />\
+                              </xs:restriction>\
+                            </xs:simpleType>\
+                          </xs:element>\
+                          <xs:element name="DayEnd" minOccurs="1" nillable="false" maxOccurs="1">\
+                            <xs:simpleType>\
+                              <xs:restriction base="xsd:string">\
+                                <xs:enumeration value="1" />\
+                                <xs:enumeration value="2" />\
+                                <xs:enumeration value="3" />\
+                                <xs:enumeration value="4" />\
+                                <xs:enumeration value="5" />\
+                                <xs:enumeration value="6" />\
+                                <xs:enumeration value="7" />\
+                                <xs:enumeration value="8" />\
+                              </xs:restriction>\
+                            </xs:simpleType>\
+                          </xs:element>\
+                          <xs:element name="Value" minOccurs="1" nillable="false" maxOccurs="1" />\
+                          <xs:element name="ValueName" minOccurs="1" nillable="false" maxOccurs="1" />\
+                          <xs:element name="TimeStart" minOccurs="1" nillable="false" maxOccurs="1" />\
+                          <xs:element name="TimeEnd" minOccurs="1" nillable="false" maxOccurs="1" />\
+                          <xs:element name="Unit" minOccurs="1" nillable="false" maxOccurs="1">\
+                            <xs:simpleType>\
+                              <xs:restriction base="xsd:string">\
+                                <xs:enumeration value="Event" />\
+                                <xs:enumeration value="Level" />\
+                                <xs:enumeration value="$/kWh" />\
+                                <xs:enumeration value="kg/kWh CO2" />\
+                                <xs:enumeration value="$/kW" />\
+                              </xs:restriction>\
+                            </xs:simpleType>\
+                          </xs:element>\
+                        </xs:all>\
+                      </xs:complexType>\
+                    </xs:element>\
+                  </xs:sequence>\
+                </xs:complexType>\
+              </xs:element>\
+            </xs:all>\
+          </xs:complexType>\
+        </xs:element>\
+      </xs:sequence>\
+    </xs:complexType>\
+  </xs:element>\
+</xs:schema>
