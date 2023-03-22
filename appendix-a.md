@@ -45,6 +45,31 @@ Putting this together for a full example, the full RIN for a rate at Marin Clean
 
 The canonical requirements for the rate upload structure is the XML rate upload schema available through the API at the `/ValueData` endpoint. You can use this schema verify that your rate upload is structured correctly prior to uploading to MIDAS using XML validation software.
 
+**Endpoint:** `/ValueData`
+
+**HTTP Request:** `POST https://midasapi.energy.ca.gov/api/ValueData`
+
+**Authorization:** Bearer
+
+**Query Parameters:** None
+
+**Body Parameters:** None
+
+**Python Example**
+
+```python
+import requests
+import xml.etree.ElementTree as ET
+
+headers = {'accept': 'application/json', 'Authorization': "Bearer " + token}
+url = 'https://midasapi.energy.ca.gov/api/valuedata'
+pricing_response = requests.get(url, headers = headers)
+
+element = ET.XML(json.loads(pricing_response.text))
+ET.indent(element)
+print(ET.tostring(element, encoding='unicode'))
+```
+
 #### Streaming Rate Structure
 All rates uploaded to MIDAS should be in a "streaming" structure. This is a time-series structure where every hour (or sub-hourly period) has an entry. There needs to be at least one value for every hour, if the rate changes with a frequency higher than hourly, it needs to have one entry for each period where the rate could change, even when it does not change.
 
@@ -100,9 +125,11 @@ Uploaded rates must also contain rate information that makes up the header secti
 _This function is available to authorized LSE accounts only._ <br>
 Populating the RateInfo and Value tables requires a call to the ValueData endpoint using the XML schema (see section 3). Acceptable data entries are catalogued in supporting MIDAS lookup tables listed in the Appendix. Each time rate data is uploaded to MIDAS, the previously uploaded rates under that Distribution or Energy Company are deleted from the Value table and only the newly uploaded values will be available to users. At the time the rate data is uploaded, it is also added to the HistoricalData table. See [Archiving Data to HistoricalData](#archived-data-in-the-historicaldata-table) above for more information. Please note, each RIN may only store a total of 50,000 values in the Value table.
 
-**Endpoint** `/ValueData`
+**Endpoint:** `/ValueData`
 
-**HTTP Request** `POST https://midasapi.energy.ca.gov/api/ValueData`
+**HTTP Request:** `POST https://midasapi.energy.ca.gov/api/ValueData`
+
+**Authorization:** Bearer
 
 #### Query Parameters
 
@@ -119,7 +146,7 @@ import requests
 priceFileName = 'XML_streaming_upload.xml'
 
 headers = {'accept': 'application/json', 'Content-Type': 'text/xml', 'Authorization': "Bearer " + token}
-url = base_url + '/valuedata'
+url = 'https://midasapi.energy.ca.gov/api/valuedata'
 priceFile = open(priceFileName)
 xml = priceFile.read()
 priceFile.close()
@@ -137,9 +164,11 @@ Uploading the list of holidays for your LSE should only need to happen on occasi
 _This function is available to authorized LSE accounts only._ <br>
 LSEs can upload the holidays that apply to their rates. This supports MIDAS users by making it clear which days are holidays on the rates they download. Populate the Holiday table by POSTing to the Holiday endpoint. The XML schema document is available as part of this documentation at [Holiday Upload XML Schema](support-docs/MIDAS-Holiday-XML-schema.xsd.xml).
 
-**Endpoint** `/Holiday`
+**Endpoint:** `/Holiday`
 
-**HTTP Request** <br> `POST https://midasapi.energy.ca.gov/api/Holiday`
+**HTTP Request:** <br> `POST https://midasapi.energy.ca.gov/api/Holiday`
+
+**Authorization:** Bearer
 
 #### Query Parameters
 
@@ -149,18 +178,18 @@ LSEs can upload the holidays that apply to their rates. This supports MIDAS user
 
 When uploading to the Holiday table, the body of the uploaded XML or JSON has the following fields:
 
-| Name                              | Description                                              | Type   |
-|-----------------------------------|----------------------------------------------------------|--------|
-| EnergyCode <br> _required_        | Two letter code for LSE from the Energy lookup table     | string |
-| EnergyDescription <br> _required_ | Full name of the LSE                                     | string |
-| DateOfHoliday <br> _required_     | Date of holiday in local time <br> format: "YYYY-MM-DDTHH:MM:SS" | date   |
-| HolidayDescription                | Full name of holiday                                     | string |
+| Name                              | Description                                              | Example | Type |
+|-----------------------------------|----------------------------------------------------------|---------|------|
+| EnergyCode <br> _required_        | Two letter code for LSE from the Energy lookup table     | "MC" | string |
+| EnergyDescription <br> _required_ | Full name of the LSE from the Energy lookup table        | "Marin Clean Energy" | string |
+| DateOfHoliday <br> _required_     | Date of holiday in local time. <br>For California PST format: "YYYY-MM-DDTHH:MM:SS-07:00" | "2023-12-25T00:00:00-07:00" | date   |
+| HolidayDescription                | Full name of holiday                                     | "Christmas 2023" | string |
 
 #### Response
 
 
 
-#### Python Example
+**Python Example**
 
 ```python
 import os 
@@ -169,7 +198,7 @@ import requests
 
 holidayFileName = 'MIDAS_Test_Holidays.json'
 headers = {'accept': 'application/json', 'Content-Type': 'text/json', 'Authorization': "Bearer " + token}
-url = base_url + '/holiday'
+url = 'https://midasapi.energy.ca.gov/api/holiday'
 holidayFile = open(holidayFileName)
 holidays = holidayFile.read()
 holidayFile.close()
