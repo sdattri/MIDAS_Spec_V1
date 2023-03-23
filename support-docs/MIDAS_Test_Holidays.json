@@ -1,0 +1,14 @@
+[
+  {
+    "DateOfHoliday": "2022-12-25T00:00:00-08:00",
+    "EnergyCode": "TS",
+    "EnergyDescription": "Test",
+    "HolidayDescription": "Christmas 2022"
+  },
+  {
+    "DateOfHoliday": "2023-01-01T00:00:00-08:00",
+    "EnergyCode": "TS",
+    "EnergyDescription": "Test",
+    "HolidayDescription": "New Years Day 2023"
+  }
+]

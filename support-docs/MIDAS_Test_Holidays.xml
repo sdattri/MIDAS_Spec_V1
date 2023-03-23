@@ -1,0 +1,14 @@
+<ArrayOfHolidayData xmlns:i="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://schemas.datacontract.org/2004/07/MIDAS_Api.Models">
+  <HolidayData>
+    <DateOfHoliday>2022-12-25T08:00:00+00:00</DateOfHoliday>
+    <EnergyCode>TS</EnergyCode>
+    <EnergyDescription>Test</EnergyDescription>
+    <HolidayDescription>Christmas 2022</HolidayDescription>
+  </HolidayData>
+  <HolidayData>
+    <DateOfHoliday>2023-01-01T08:00:00+00:00</DateOfHoliday>
+    <EnergyCode>TS</EnergyCode>
+    <EnergyDescription>Test</EnergyDescription>
+    <HolidayDescription>New Years Day 2023</HolidayDescription>
+  </HolidayData>
+</ArrayOfHolidayData>

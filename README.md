@@ -164,6 +164,9 @@ import requests
 import json
 import base64
 
+username = "<your username>"
+password = "<your password>"
+
 credentials = username + ":" + password
 credentials_encodedBytes = base64.b64encode(credentials.encode("utf-8"))
 

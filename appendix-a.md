@@ -1,12 +1,13 @@
 # Appendix A - Uploading to MIDAS
 
-Only CEC approved entities can upload to MIDAS. To request upload capabilities, after establishing a MIDAS account by registering through the `registration` API endpoint and verifying your email by clicking on the link, then send an email to midas@energy.ca.gov from your LSE email account. CEC staff will review your request and respond.
+Only CEC approved entities can upload to MIDAS. To request upload capabilities, after establishing a MIDAS account by registering through the `registration` API endpoint and verifying your email by clicking on the link, send an email to midas@energy.ca.gov from your LSE email account. CEC staff will review your request and respond.
 
 ## Rate and Holiday Upload Support
 
-LSEs are encouraged to reach out to CEC staff at midas@energy.ca.gov with any questions or issues with MIDAS. Staff will do our best to answer any questions and address issues quickly.
+LSEs are encouraged to reach out to CEC staff at midas@energy.ca.gov with any questions or issues with MIDAS. Staff will do their best to answer any questions and address issues quickly.
 
-The rate upload XML schema is available through the MIDAS API. The version from the API is the canonical one. However, we are also providing the XML schema document as part of this documentation. [XML Schema Document](support-docs/MIDAS-upload-XML-schema.xsd)
+The rate upload XML schema is available through the MIDAS API. The version from the API is the canonical one. However, we are also providing the XML schema document as part of this documentation. [XML Schema Document](support-docs/MIDAS-upload-XML-schema.xsd).
+
 
 ## Rate Definitions
 
@@ -131,11 +132,11 @@ Populating the RateInfo and Value tables requires a call to the ValueData endpoi
 
 **Authorization:** Bearer
 
-#### Query Parameters
+**Query Parameters:** None
 
-**None**
+**Response:** A successful upload will return an HTMLStatusCode of 200
 
-#### Python Example
+**Python Example**
 
 ```python
 import os 
@@ -157,7 +158,15 @@ print(pricing_response.text)
 
 ## Upload Holidays
 
-Uploading the list of holidays for your LSE should only need to happen on occasion, perhaps once per year.
+Uploading the list of holidays for your LSE should only need to happen on occasion, perhaps once per year. These holidays will apply to all rates for your LSE.
+
+### Example Holiday Upload Files
+
+Here are example files for holiday uploads, one using JSON and the other using XML. MIDAS will accept either format, but you must change the Content-Type header accordingly. For JSON, the content type should be "text/json" or "application/json" and for XML, it should be "text/xml" or "application/xml".
+
+[JSON Holiday example](support-docs/MIDAS_Test_Holidays.json)
+
+[XML Holiday example](support-docs/MIDAS_Test_Holidays.xml)
 
 ### POST Holiday Values
 
@@ -170,13 +179,11 @@ LSEs can upload the holidays that apply to their rates. This supports MIDAS user
 
 **Authorization:** Bearer
 
-#### Query Parameters
+**Query Parameters:** None
 
-**None**
+**Body Parameters:**
 
-#### Body Parameters
-
-When uploading to the Holiday table, the body of the uploaded XML or JSON has the following fields:
+When uploading to the Holiday table, the body of the uploaded XML or JSON has the following fields for each holiday:
 
 | Name                              | Description                                              | Example | Type |
 |-----------------------------------|----------------------------------------------------------|---------|------|
@@ -185,9 +192,7 @@ When uploading to the Holiday table, the body of the uploaded XML or JSON has th
 | DateOfHoliday <br> _required_     | Date of holiday in local time. <br>For California PST format: "YYYY-MM-DDTHH:MM:SS-07:00" | "2023-12-25T00:00:00-07:00" | date   |
 | HolidayDescription                | Full name of holiday                                     | "Christmas 2023" | string |
 
-#### Response
-
-
+**Response:** A successful upload will return an HTMLStatusCode of 200
 
 **Python Example**
 
