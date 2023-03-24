@@ -30,7 +30,7 @@ Source: California Energy Commission
 
 ## Rate Information
 
-MIDAS provides rate information for all time-dependent rates for the three largest investor owned utilities (IOUs), the two largest publicly-owned utilities (POUs) and the 12 largest community choice aggregators (CCAs), as required by the CEC's load management standards. Time-dependent rates are rates that have prices which vary over the course of a day. Other California utilities and CCAs may request access to provide their rates through MIDAS, but are not required to do so.
+To fulfill the requirements of the CEC's load managment standards, MIDAS provides rate information for all time-dependent rates for the three largest investor owned utilities (IOUs), the two largest publicly-owned utilities (POUs) and the 12 largest community choice aggregators (CCAs) in California. Time-dependent rates are rates that have prices which vary over the course of a day. Other California utilities and CCAs may use MIDAS to provide information and prices for their rates, but are not required to do so.
 
 ## SGIP GHG Emissions
 
@@ -59,8 +59,8 @@ The MIDAS API is comprised of six endpoints:
 
 * Registration: Use POST to create a new account.
 * Token: Use GET to retrieve a temporary token for interacting with the MIDAS API. Tokens must be passed to every API call except Registration and Token.
-* Holiday: Use GET to retreive the list of all holidays. Use POST to populate the Holiday table (LSE accounts only).
-* ValueData: Use GET to retrieve a list of available rates (RINs), rate information, the XML schema, or lookup tables. Use POST to upload data to the RateInfo and Value tables (LSE accounts only).
+* Holiday: Use GET to retreive the list of all holidays. LSE accounts may use POST to populate the Holiday table.
+* ValueData: Use GET to retrieve a list of available rates (RINs), rate information, the XML schema, or lookup tables. LSE accounts may use POST to upload data to the RateInfo and Value tables.
 * HistoricalData: Use GET to retrieve historic rate information.
 * HistoricalList: Use GET to retreive the list of rates (RINs) available from HistoricalData.
 
@@ -428,7 +428,7 @@ print(json.dumps(json.loads(list_response.text), indent = 2))
 
 ## GET Historical Rate Data
 
-To receive historical information, all accounts may query the GET RIN History Data call. This call is part of the HistoricalData endpoint. Pass a RIN with a parameter that identifies the “startdate” and “enddate” to return historic values for the specified RIN during that timeframe in XML or JSON as specified in the header. Please note, only historic RINs may be used in this call. For example, GHG and Flex Alert RINs have separate historic RINs.
+To receive historical information, all accounts may query the GET RIN History Data call. This call is part of the HistoricalData endpoint. Pass a RIN with a parameter that identifies the “startdate” and “enddate” to return historic values for the specified RIN during that timeframe in XML or JSON as specified in the header. Please note, only historic RINs may be used in this call. For example, GHG and Flex Alert RINs use different RINs to access historical values. See [CAISO Flex Alerts](#caiso-flex-alerts) and [SGIP GHG Emissions](#sgip-ghg-emissions) above for details.
 
 **Endpoint:** `/HistoricalData`
 
@@ -485,7 +485,7 @@ Repository of Python language example code for working with MIDAS:
 
 Repository of R language example code for working with MIDAS: <https://github.com/morganmshep/MIDAS-R-Repository>
 
-Repository for installable R language package for easily and reliably working with MIDAS: <https://github.com/stefwayland/cecmidas>
+Repository for installable R language package for working with MIDAS: <https://github.com/stefwayland/cecmidas>
 
 ## C-Sharp (C#)
 
@@ -495,12 +495,18 @@ Repository of C# language example code for working with MIDAS:
 
 # Appendices
 
+## Appendix A Uploading to MIDAS
+
 [Appendix A](appendix-a.md) discusses rate and holiday upload and links to example upload documents.
+
+## Appendix B Acronyms and Glossary
 
 [Appendix B](appendix-b.md) contains a list of acronyms and a glossary.
 
+## Appendix C Lookup Tables
+
 [Appendix C](appendix-c.md) contains a list of all lookup tables available through MIDAS.
 
+## Appendix D MIDAS Architecture
+
 [Appendix D](appendix-d.md) contains a diagram of the MIDAS API service architecture.
-
-
