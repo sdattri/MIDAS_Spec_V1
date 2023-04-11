@@ -3,12 +3,13 @@
 ## Acronyms
 
 API: Application Programming Interface <br>
+CCA: Community Choice Aggregator <br>
 CEC: California Energy Commission <br>
 DDoS: Distributed Denial of Service <br>
 GHG: Greenhouse Gas <br>
 GUID: Global Unique Identifier <br>
 ISO: Independent System Operator <br>
-LSE: Load Serving Entity <br>
+LSE: Load Serving Entity (in California, this is generally a utility or CCA)<br>
 MIDAS: Market Informed Demand Automation Server <br>
 RESTful API: Representational State Transfer <br>
 RIN: Rate Identification Number <br>
@@ -26,7 +27,7 @@ UTC: Coordinated Universal Time
 **A Load Serving Entity (LSE)**: provides electricity to customers (load) directly through purchases of electric energy. <br>
 **Market Informed Demand Automation Server (MIDAS)**: is the CEC’s centralized, publicly accessible, rate, greenhouse gas emissions, and FlexAlert database. <br>
 **Representational State Transfer (RESTful) API**: An API that follows the guidelines of REST architectural style to interact with other RESTful services. <br>
-**Rate Identification Number (RIN)**: is the primary lookup ID for electricity rates in the MIDAS system. <br>
+**Rate Identification Number (RIN)**: is the identification number used for looking up electricity rates in the MIDAS system. <br>
 **Time Dependent Rate**: is a rate where one or more of the cost components changes intra-day. For an electricity customer, this means that the price of electricity depends on the time of day. <br>
 **Time-of-Use (TOU)**: rates refer to electricity prices that are based on the times at which they are demanded and consumed. TOU rates usually have two to three different prices at different times of day. The time pattern and the prices are set months or years ahead. See <https://www.cpuc.ca.gov/industries-and-topics/electrical-energy/electric-rates> for some more information on TOU rates in California. <br>
 **Coordinated Universal Time (UTC)**: the primary standard time used to regulate clocks and time worldwide. See <https://en.wikipedia.org/wiki/Coordinated_Universal_Time> for more information.
