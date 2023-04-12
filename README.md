@@ -22,6 +22,8 @@ The MIDAS database supports retrieval of electric utility price schedules, Calif
 
 Pursuant to the Load Management Standards, the state’s largest utilities and CCAs are responsible for populating the MIDAS database Holiday table, RateInfo table, and the Value table with all time-varying rate information and values offered to customers. For upload examples, please see [Appendix A](appendix-a.md). For instructions on how to retrieve the XML upload schema, please see section 3.
 
+Note: CEC and stakeholders are currently discussing possible changes to the rate data structure. We will update this document ahead of any changes to the rate structure and reach out to stakeholders and users.
+
 The primary lookup identification (ID) for the MIDAS database is a compound key comprised of six individual fields that make up a standardized rate identification number (RIN) as shown in Figure 1. RINs are assigned at the time rate information is first uploaded by the LSE through the MIDAS API. When an LSE uploads to an existing RIN, the correct RIN must be used at the time of upload. Figure 1 illustrates the six identifiers that comprise a RIN: Country, State, Distribution, Energy, Rate, and Location. The location portion of the RIN may consist of 1 to 10 characters depending on the specified location’s requirements.
 
 Figure 1. Rate Identification Number Structure<br>

@@ -2,6 +2,8 @@
 
 Only CEC approved entities can upload to MIDAS. After establishing a MIDAS account by registering through the `registration` API endpoint and verifying your email by clicking on the link, request upload capabilities by sending an email to midas@energy.ca.gov from your LSE email account. CEC staff will review your request and respond.
 
+Note: Utilities may be assigned either distribution or energy company access to MIDAS. These assignments change what rates the user is allowed to upload. For now, LSE accounts will be assigned as energy companies, but this may change depending on ongoing discussions.
+
 ## Rate and Holiday Upload Support
 
 LSEs are encouraged to reach out to CEC staff at midas@energy.ca.gov with any questions or issues with MIDAS. Staff will do their best to answer any questions and address issues quickly.
@@ -47,6 +49,11 @@ The next four characters are open for the LSE to define. These four alphanumeric
 The final four to 10 characters are the location code. For rates with no specific location, use the four character code **0000**. The list of allowable location codes are available in the **Location** lookup table. If your LSE has location codes to add to that table, contact the MIDAS team at midas@energy.ca.gov to request the addition of those codes.
 
 Putting this together for a full example, the full RIN for a rate at Marin Clean Energy could be **USCA-PGMC-CTOU-0000**.
+
+Notes on RINs: 
+
+1. CEC staff are working with utilities and CCAs to determine how to upload rates when the entity in charge of the generation portion of the rate is different from the entity in charge of the delivery (usually transmission and distribution) portion of the rate. We will add more detail on how to determine RINs when parties come to an agreement.
+2. CEC staff are working with stakeholders to determine how to decide what constitutes a "rate" in MIDAS. LSEs each have a number of base rates, but there are a number of rate modifiers that change the volumetric price of electricity, including FERA, CARE, and others. These may need to be applied to the base rate and uploaded seperately, with a different RIN. We will add more detail to this document when parties come to an agreement.
 
 ### Rate Upload Data Structure
 
