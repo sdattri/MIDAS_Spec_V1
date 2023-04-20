@@ -1,0 +1,1 @@
+support-docs/MIDAS-Data-Dictionary.xlsx filter=lfs diff=lfs merge=lfs -text
