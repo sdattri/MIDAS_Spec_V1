@@ -512,3 +512,7 @@ Repository of C# language example code for working with MIDAS:
 ## Appendix D MIDAS Architecture
 
 [Appendix D](appendix-d.md) contains a diagram of the MIDAS API service architecture.
+
+## Appendix E MIDAS Data Dictionary
+
+[Appendix E](appendix-e.md) contains the description of the data dictionary and a link to download it.
