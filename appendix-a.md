@@ -13,9 +13,7 @@ The rate upload XML schema is available through the MIDAS API. The version from 
 
 ## Rate Definitions
 
-MIDAS is designed to provide energy users with the electricity price information they need to optimize when they use energy. While it would be useful for electricity users to be able to use the data from MIDAS to try to estimate electricity bill totals, some billing structures such as tiered rates make this impossible without private customer-specific data. The decision to exclude private data from MIDAS has an upside: inclusion of just the time-dependent portions of rates, as required by the CEC Load Management Standards, reduces the number of different rates that need to be uploaded to MIDAS while still providing electricity users with the information they need to optimize their energy use over periods of hours to days.
-
-In order for electricity users to effectively optimize energy use, they need information on the volumetric portions of their rates. This tells them how much each kW costs during a particular time period. Energy users can use this information to decide when to use electricity and allow their controllable devices to adjust when they use electricity, saving the user money. When enough users shift their electricity use to cheaper and greener hours when more energy is available, this can reduce electricity costs for all users of the grid.
+MIDAS is designed to provide energy users with the electricity price information they need to decide when to use energy. While it would be useful for electricity users to be able to use the data from MIDAS to try to estimate electricity bill totals, some current billing structures such as tiered rates make this impossible without private customer-specific data. Electricity users need information (prices) on the volumetric portions of their rates to effectively optimize energy use. This tells them how much each kWh costs during a particular time period. Energy users can use this information to decide when to use electricity. They can also set their controllable devices to adjust when they use electricity based on the same information. When enough users shift their electricity use to cheaper and greener hours when more renewable energy is available, this can reduce electricity costs for all users of the grid.
 
 ## Upload Rates
 
@@ -38,7 +36,7 @@ Here are some example rate upload documents to help LSEs format rate uploads. Ea
 
 ### Assigning a RIN
 
-The first step to uploading a rate to MIDAS is to determine the Rate Identification Number (RIN). See Figure 1 above for the RIN structure. If a rate already exists in MIDAS and you don't have the RIN available, refer to the [Get RIN LIST](#get-rin-list) section above to download the list of RINs, and make sure to use the existing RIN. If the rate has never been previously uploaded to MIDAS, you will need to determine the RIN before uploading.
+The first step to uploading a rate to MIDAS is to determine the Rate Identification Number (RIN). See [Figure 1](README.md#database-structure) for the RIN structure. If a rate already exists in MIDAS and you don't have the RIN available, refer to the [Get RIN LIST](README.md#get-rin-list) section in the main docuemntation to download the list of RINs, and make sure to use the existing RIN. If the rate has never been previously uploaded to MIDAS, you will need to determine the RIN before uploading.
 
 For California-based LSEs, the first four characters of the RIN will always be **USCA**, showing that the LSE is in the United States (US) and California (CA). For utility users in other countries and states/provinces, refer to the **Country** and **State** lookup tables to find your country and state code.
 
@@ -50,10 +48,12 @@ The final four to 10 characters are the location code. For rates with no specifi
 
 Putting this together for a full example, the full RIN for a rate at Marin Clean Energy could be **USCA-PGMC-CTOU-0000**.
 
-Notes on RINs: 
-
-1. CEC staff are working with utilities and CCAs to determine how to upload rates when the entity in charge of the generation portion of the rate is different from the entity in charge of the delivery (usually transmission and distribution) portion of the rate. We will add more detail on how to determine RINs when parties come to an agreement.
-2. CEC staff are working with stakeholders to determine how to decide what constitutes a "rate" in MIDAS. LSEs each have a number of base rates, but there are a number of rate modifiers that change the volumetric price of electricity, including FERA, CARE, and others. These may need to be applied to the base rate and uploaded seperately, with a different RIN. We will add more detail to this document when parties come to an agreement.
+> Notes on RINs:
+> 
+> 1. CEC is evaluating how to upload rates when the entity in charge of the generation portion of the rate is different from the entity in charge of the delivery (usually transmission and distribution) portion of the rate.
+> 2. CEC is evaluating what constitutes a "rate" in MIDAS. LSEs each have a number of base rates, but there are a number of rate modifiers that change the volumetric price of electricity, including FERA, CARE, and others.
+>
+> We expect some future updates and clarifications
 
 ### Rate Upload Data Structure
 
@@ -129,15 +129,15 @@ Uploaded rates must also contain rate information that makes up the header secti
 * **AltRateName2** _optional_ A second alternative name for the rate
 * **SignupCloseDate** _optional_ The last day a customer may sign up for the rate
 * **RatePlan_Url** _optional_ A valid URL that directs to the utility webpage describing the rate plan
-* **RateType** _optional_ The applicable rate type. Must be one of those in the RateType lookup table
-* **Sector** _optional_ The sector that the rate applies to. Must be one of those in the Sector lookup table
-* **EndUse** _optional_ The end use that the rate applies to. Must be one of those in the EndUse lookup table
+* **RateType** _optional_ The applicable rate type; must be one of those in the RateType lookup table
+* **Sector** _optional_ The sector that the rate applies to; must be one of those in the Sector lookup table
+* **EndUse** _optional_ The end use that the rate applies to; must be one of those in the EndUse lookup table
 * **API_Url** _optional_ A valid uniform resource locator (URL) that specifies the API that provides the values
 
 ### POST Rate Information
 
 _This function is available to authorized LSE accounts only._ <br>
-Populating the RateInfo and Value tables requires a call to the ValueData endpoint using the XML schema (see section 3). Acceptable data entries are catalogued in supporting MIDAS lookup tables listed in the Appendix. Each time rate data is uploaded to MIDAS, the previously uploaded rates under that Distribution or Energy Company are deleted from the Value table and only the newly uploaded values will be available to users. At the time the rate data is uploaded, it is also added to the HistoricalData table. See [Archiving Data to HistoricalData](#archived-data-in-the-historicaldata-table) above for more information. Please note, each RIN may only store a total of 50,000 values in the Value table.
+Populating the RateInfo and Value tables requires a call to the ValueData endpoint. Upload data may be encoded in XML or JSON. Acceptable data entries are catalogued in supporting MIDAS lookup tables listed in the Appendix. At the time the rate data is uploaded, it is also added to the HistoricalData table. For mor information, see [Archiving Data to HistoricalData](README.md#archived-data-in-the-historicaldata-table) in the main documentation. Each RIN may only store a total of 50,000 values in the Value table.
 
 **Endpoint:** `/ValueData`
 
@@ -156,7 +156,7 @@ import os
 import sys
 import requests
 
-# File on the local filesystem that is correctly formatted against the XML schema definition (XSD)
+# File on the local filesystem that is correctly formatted against the XML schema definition (XSD) or analagously formatted JSON.
 priceFileName = 'XML_streaming_upload.xml'
 
 headers = {'accept': 'application/json', 'Content-Type': 'text/xml', 'Authorization': "Bearer " + token}

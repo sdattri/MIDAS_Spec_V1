@@ -20,9 +20,7 @@ MIDAS was developed to support the CEC's [Load Management Standards](https://www
 
 The MIDAS database supports retrieval of electric utility price schedules, California Flex Alert signals, and marginal GHG emissions from electrical generation. Flex Alerts and GHG emissions values – both forecasted and real-time - are continually retrieved from the California ISO Flex Alert site and WattTime’s SGIP API respectively. GHG realtime and forecasted values are cached, or temporarily stored, within MIDAS until new values are available while Flex Alerts are passed through MIDAS from the California ISO website, as a user queries MIDAS. Previous real-time values are moved to the HistoricalData table automatically. A record of previously active Flex Alerts and historic GHG emissions are stored in the HistoricalData table.
 
-Pursuant to the Load Management Standards, the state’s largest utilities and CCAs are responsible for populating the MIDAS database Holiday table, RateInfo table, and the Value table with all time-varying rate information and values offered to customers. For upload examples, please see [Appendix A](appendix-a.md). For instructions on how to retrieve the XML upload schema, please see section 3.
-
-Note: CEC and stakeholders are currently discussing possible changes to the rate data structure. We will update this document ahead of any changes to the rate structure and reach out to stakeholders and users.
+Pursuant to the California Load Management Standards, the state’s largest utilities and CCAs are responsible for populating the MIDAS database Holiday table, RateInfo table, and the Value table with all time-varying rate information and values offered to customers. For upload examples, please see [Appendix A](appendix-a.md). For instructions on how to retrieve the XML upload schema, please see section 3.
 
 The primary lookup identification (ID) for the MIDAS database is a compound key comprised of six individual fields that make up a standardized rate identification number (RIN) as shown in Figure 1. RINs are assigned at the time rate information is first uploaded by the LSE through the MIDAS API. When an LSE uploads to an existing RIN, the correct RIN must be used at the time of upload. Figure 1 illustrates the six identifiers that comprise a RIN: Country, State, Distribution, Energy, Rate, and Location. The location portion of the RIN may consist of 1 to 10 characters depending on the specified location’s requirements.
 
@@ -30,9 +28,12 @@ Figure 1. Rate Identification Number Structure<br>
 ![Rate Identifican Number Specification](img/RIN-structure.png)<br>
 Source: California Energy Commission
 
+Note: We will update this document ahead of any changes to the rate structure and reach out to stakeholders and users.
+
+
 ## Rate Information
 
-To fulfill the requirements of the CEC's load management standards, MIDAS provides rate information for all time-dependent rates for the three largest investor owned utilities (IOUs), the two largest publicly owned utilities (POUs) and the 12 largest CCAs in California. Time-dependent rates are rates that have prices which vary over the course of a day. Other California utilities and CCAs may use MIDAS to provide information and prices for their rates, but are not required to do so.
+To fulfill the requirements of the California's load management standards, MIDAS receives and shares information for all time-dependent rates for the three largest investor owned utilities (IOUs), the two largest publicly owned utilities (POUs) and the 12 largest CCAs in California. Time-dependent rates are rates that have prices which vary over the course of a day. Other California utilities and CCAs may use MIDAS to provide information and prices for their rates, but are not required to do so.
 
 ## SGIP GHG Emissions
 
@@ -42,7 +43,7 @@ WattTime estimates GHG emissions for 11 regions across the state of California p
 
 MIDAS includes three different Flex Alert RINS - real-time, forecasted, and historic values with dates and times of previous Flex Alerts. The California ISO maintains information as to whether there is an active Flex Alert and whether one is planned. MIDAS checks the California ISO Flex Alert web page for Flex Alerts and adds it to the database.
 
-RINs of USCA-FLEX-FXRT-0000 and USCA-FLEX-FXFC-0000 check  at the moment a query is initiated through the MIDAS API. The data is passed through to the querying user directly and instantaneously. The “FXRT” portion of the first RIN stands for “Flex Alert real-time” and “FXFC” in the second RIN stands for “Flex Alert forecasted”. In the RIN USCA-FLEX-FXHT-0000, “FXHT” stands for “Flex Alert historical”. All previously active Flex Alerts will be reflected in the information retrieved with this RIN.
+RINs of USCA-FLEX-FXRT-0000 and USCA-FLEX-FXFC-0000 check for CA ISO Flex Alerts at the moment a query is initiated through the MIDAS API. The result is passed through to the querying user directly. The “FXRT” portion of the first RIN stands for “Flex Alert real-time” and “FXFC” in the second RIN stands for “Flex Alert forecasted”. In the RIN USCA-FLEX-FXHT-0000, “FXHT” stands for “Flex Alert historical”. All previously active Flex Alerts will be reflected in the information retrieved with this RIN.
 For more information on the XML schema and uploads, see [Appendix A](appendix-a.md).
 
 ## Archived Data in the HistoricalData Table
@@ -66,7 +67,7 @@ The MIDAS API is comprised of six endpoints:
 * HistoricalData: Use GET to retrieve historic rate information.
 * HistoricalList: Use GET to retrieve the list of rates (RINs) available from HistoricalData.
 
-The following are instructions for registering a MIDAS account and a description of the basic functions that can be used to upload and download MIDAS data. Here, we provide some examples in the Python programming language. Links to GitHub repositories with examples in Python and other programming languages are in [Example Code](#example-code) below.
+The following are instructions for registering a MIDAS account and a description of the basic functions that can be used to upload and download MIDAS data. The examples use the Python programming language. Links to GitHub repositories with examples in Python and other programming languages are in [Example Code](#example-code) below.
 
 ## Register
 
@@ -236,7 +237,7 @@ print(json.dumps(json.loads(list_response.text), indent = 2))
 
 ## GET Values
 
-This call allows all accounts to receive values and other information on a specified RIN. Pass a RIN with parameter RealTime to return the current value, or AllData to the ValueData endpoint to return the full schedule in either XML or JSON, as indicated in the header.
+Use this query to receive values and other information on a specified RIN. Pass a RIN with parameter RealTime to return the current value, or AllData to the ValueData endpoint to return the full schedule in either XML or JSON, as indicated in the header.
 
 **Endpoint:** `/ValueData`
 
@@ -304,7 +305,7 @@ print(json.dumps(json.loads(pricing_response.text), indent = 2))
 
 ## GET Lookup Table
 
-To get the values stored in each lookup table, use the GET Lookup table call. This call is part of the ValueData endpoint with a parameter that identifies the relevant lookup table. Possible lookup tables include Country, Daytype, Distribution, Enduse, Energy, Location, Ratetype, Sector, State, and TimeZone. The returned data will have the upload code and description for the specified lookup table. See [Appendix C](appendix-c.md) for more detail on the lookup tables.
+To get the values stored in each lookup table, use the GET Lookup Table call. This call is part of the ValueData endpoint with a parameter that identifies the relevant lookup table. Possible lookup tables include Country, Daytype, Distribution, Enduse, Energy, Location, Ratetype, Sector, State, and TimeZone. The returned data will have the upload code and description for the specified lookup table. See [Appendix C](appendix-c.md) for more detail on the lookup tables.
 
 **Endpoint:** `/ValueData`
 
@@ -360,7 +361,7 @@ Holidays that apply to rates are stored in the Holiday table. There is no parame
 
 **Response Description:**
 
-Rate Information will include the following fields:<br>
+Holiday Information will include the following fields:<br>
 | Name    | Description                                   | Example | Type   |
 |--------|-----------------------------------------------|---------|--------|
 | EnergyCode | The code for the energy provider to which the holiday applies | "PG" | string |
@@ -470,7 +471,7 @@ print(json.dumps(json.loads(list_response.text), indent = 2))
 
 # Posting Data to MIDAS
 
-_**Only CEC approved accounts may upload data to MIDAS.**_ <br>
+_**Only CEC approved accounts may upload data to MIDAS.**_ 
 See [Appendix A](appendix-a.md) for in-depth details on uploading rates to MIDAS.
 
 
