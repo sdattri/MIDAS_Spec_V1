@@ -87,6 +87,17 @@ print(ET.tostring(element, encoding='unicode'))
 #### Streaming Rate Structure
 All rates uploaded to MIDAS should be in a "streaming" structure. This is a time-series structure where every hour (or sub-hourly period) has an entry. There needs to be at least one value for every hour, if the rate changes with a frequency higher than hourly, it needs to have one entry for each period where the rate could change, even when it does not change.
 
+Each time period (interval) contains these fields:
+* **DateStart** _required_ This is the date in UTC when the rate interval starts.
+* **TimeStart** _required_ This is the time in UTC when the rate interval starts.
+* **DateEnd** _required_ This is the date in UTC when the rate interval ends.
+* **TimeEnd** _required_ This is the time in UTC when the rate interval ends.
+* **DayStart** _required_ This is the day type (1-8) when the rate interval starts. Allowable day types are in the DayType lookup table.
+* **DayEnd** _required_ This is the day type (1-8) when the rate interval ends. Allowable day types are in the DayType lookup table.
+* **Value** _required_ This is the value (usually the price) that applies to the interval.
+* **Unit** _required_ This is the unit that applies to the Value (usually $/kWh) that applies to the interval. Allowable units are in the Unit lookup table.
+* **ValueName** _required_ A description that applies to the interval.
+
 The `DateStart` and `TimeStart`, and `DateEnd` and `TimeEnd` fields in the rate must be in UTC. Combining `DateStart` and `TimeStart` will yield a UTC datetime, as will combining `DateEnd` and `TimeEnd`. For example, for the first hour of March 1 in California (UTC-8), we would convert an interval start date of "2023-01-01" and start time of "00:00:00" to UTC, yielding a `DateStart` of "2023-01-01" and `TimeStart` of "08:00:00".
 
 One day of a streaming rate would include the information Table 1. The table shows data for March 1, 2023 in the "America/Los_Angeles", also known as "PST/PDT" time zone. Note that the dates and times are all in UTC:
@@ -121,7 +132,7 @@ _Example_ Hourly Rate Information for 2023-03-01 <br>
 
 #### Rate Information
 
-Uploaded rates must also contain rate information that makes up the header section of the XML. Many of these are optional, but including all of those applicable to the rate will substantially help users. 
+Uploaded rates must also contain rate information that makes up the header section of the XML or JSON. Many of these are optional, but including all of those applicable to the rate will substantially help users. 
 
 * **RateID** _required_ This is the Rate Identification Number (RIN)
 * **RateName** _required_ The LSE’s name for the rate plan, consistent with the CEC’s Interval Meter Database as required by California Code of Regulations, Title 20, section 134¬4

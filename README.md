@@ -1,7 +1,7 @@
 Market Informed Demand Automation Server (MIDAS) Documentation
 ==============================================================
 
-_Connecting to and Interacting with the MIDAS API_
+_Interacting with the MIDAS API_
 
 [[_TOC_]]
 
