@@ -12,5 +12,4 @@ Location Table: Contains the 1 to 10-character code relevant to each location wi
 Rate Type Table: Contains the Rate Type Code, up to 10 characters, options applicable to each company’s rates with a description of each rate. <br>
 Sector Table: Contains the three-letter code for the sector relevant to each value with a description for each sector. <br>
 State/Province Table: Contains the two-letter code for each US state with the name of each included in the description. <br>
-Time Zone Table: Contains the three- to four-letter code relevant to each time zone with an accompanying description. <br>
 Unit Table: Contains the unit code relevant to each rate, emissions, or event value, up to 50 characters with a description describing each.
