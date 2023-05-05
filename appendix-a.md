@@ -24,15 +24,11 @@ Rates must be updated in MIDAS before prices change so that electricity users ca
 Here are some example rate upload documents to help LSEs format rate uploads. Each example XML or JSON file only contains a few days worth of data (March 1-3, 2023) for readability. 
 
 * **TOU rate** An example of a TOU rate with hourly values. A full year of this rate would have 8760 ValueData blocks<br>
-[XML TOU example]()<br>
-[JSON TOU example]()
-* **Streaming rate** This file is the same format as the TOU rate, but prices vary hourly<br>
-[XML streaming example]()<br>
-[JSON streaming example]()
+[XML TOU example](support-docs/MIDAS_Test_TOU.xml)<br>
+[JSON TOU example](support-docs/MIDAS_Test_TOU.json)
 * **TOU rate with time-varying demand charges** This file contains the same rate as the TOU file, but also contains ValueData blocks for time-dependent demand charges<br>
-[XML TOU+demand example]()<br>
-[JSON TOU+demand example]()
-% TODO: Add these example rates to the support-docs folder
+[XML TOU+demand example](support-docs/MIDAS_Test_Demand.xml)<br>
+[JSON TOU+demand example](support-docs/MIDAS_Test_Demand.json)
 
 ### Assigning a RIN
 
@@ -47,13 +43,6 @@ The next four characters are open for the LSE to define. These four alphanumeric
 The final four to 10 characters are the location code. For rates with no specific location, use the four character code **0000**. The list of allowable location codes are available in the **Location** lookup table. If your LSE has location codes to add to that table, contact the MIDAS team at midas@energy.ca.gov to request the addition of those codes.
 
 Putting this together for a full example, the full RIN for a rate at Marin Clean Energy could be **USCA-PGMC-CTOU-0000**.
-
-> Notes on RINs:
-> 
-> 1. CEC is evaluating how to upload rates when the entity in charge of the generation portion of the rate is different from the entity in charge of the delivery (usually transmission and distribution) portion of the rate.
-> 2. CEC is evaluating what constitutes a "rate" in MIDAS. LSEs each have a number of base rates, but there are a number of rate modifiers that change the volumetric price of electricity, including FERA, CARE, and others.
->
-> We expect some future updates and clarifications
 
 ### Rate Upload Data Structure
 
@@ -87,6 +76,8 @@ print(ET.tostring(element, encoding='unicode'))
 #### Streaming Rate Structure
 All rates uploaded to MIDAS should be in a "streaming" structure. This is a time-series structure where every hour (or sub-hourly period) has an entry. There needs to be at least one value for every hour, if the rate changes with a frequency higher than hourly, it needs to have one entry for each period where the rate could change, even when it does not change.
 
+If the rate has more than one value in each interval each value will have the fields shown in the next paragraph. For example, a rate with asymmetric prices where the import price is different from the expost price will need to have the following fields for each hour for the import price using the unit "\$/kWh" and also the following fields for the export price with the unit "export \$/kWh".
+
 Each time period (interval) contains these fields:
 * **DateStart** _required_ This is the date in UTC when the rate interval starts.
 * **TimeStart** _required_ This is the time in UTC when the rate interval starts.
@@ -102,7 +93,7 @@ The `DateStart` and `TimeStart`, and `DateEnd` and `TimeEnd` fields in the rate 
 
 One day of a streaming rate would include the information Table 1. The table shows data for March 1, 2023 in the "America/Los_Angeles", also known as "PST/PDT" time zone. Note that the dates and times are all in UTC:
 
-_Example_ Hourly Rate Information for 2023-03-01 <br>
+_Example_ Hourly Rate Information for 2023-03-01 in California. Note that the dates and times are in UTC, not local time. <br>
 |DateStart|TimeStart|DateEnd|TimeEnd|DayStart|DayEnd|ValueName|Value|Unit|
 |---------|---------|-------|-------|--------|------|---------|-----|----|
 |2023-03-01|08:00:00|2023-03-01|08:59:59|3|3|winter off peak|0.1006|$/kWh|

@@ -28,8 +28,7 @@ Figure 1. Rate Identification Number Structure<br>
 ![Rate Identifican Number Specification](img/RIN-structure.png)<br>
 Source: California Energy Commission
 
-Note: We will update this document ahead of any changes to the rate structure and reach out to stakeholders and users.
-
+Rate Indentification Numbers do not change over time. The prices and values may change, but an electricity customer's RIN should not change unless their rate components or rate modifiers change or the utility or customer changes their rate tarrif.
 
 ## Rate Information
 
