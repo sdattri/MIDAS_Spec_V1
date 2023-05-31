@@ -1,6 +1,6 @@
 # Appendix A - Uploading to MIDAS
 
-Only CEC approved entities can upload to MIDAS. After establishing a MIDAS account by registering through the `registration` API endpoint and verifying your email by clicking on the link, request upload capabilities by sending an email to midas@energy.ca.gov from your LSE email account. CEC staff will review your request and respond.
+Only CEC approved entities can upload to MIDAS. After establishing a MIDAS account by registering through the `registration` API endpoint and verifying your email, request upload capabilities by sending an email to midas@energy.ca.gov from your LSE email account. The email must come from a utility or CCA account, and should include the information you used when creating the account in MIDAS. CEC staff will review your request and respond.
 
 Note: Utilities may be assigned either distribution or energy company access to MIDAS. These assignments change what rates the user is allowed to upload. For now, LSE accounts will be assigned as energy companies, but this may change depending on ongoing discussions.
 
@@ -17,7 +17,7 @@ MIDAS is designed to provide energy users with the electricity price information
 
 ## Upload Rates
 
-Rates must be updated in MIDAS before prices change so that electricity users can plan for and act on price changes. LSEs can upload rates to MIDAS in either XML or JSON format.
+Rates must be updated in MIDAS before prices change so that electricity users can plan for and act on price changes. LSEs can upload rates to MIDAS in either XML or JSON format. When an LSE uploads a new set of values for a rate, the previous set are removed from the Value table, but retained in the ValueHistory table.
 
 ### Rate Examples
 
@@ -76,7 +76,7 @@ print(ET.tostring(element, encoding='unicode'))
 #### Streaming Rate Structure
 All rates uploaded to MIDAS should be in a "streaming" structure. This is a time-series structure where every hour (or sub-hourly period) has an entry. There needs to be at least one value for every hour, if the rate changes with a frequency higher than hourly, it needs to have one entry for each period where the rate could change, even when it does not change.
 
-If the rate has more than one value in each interval each value will have the fields shown in the next paragraph. For example, a rate with asymmetric prices where the import price is different from the expost price will need to have the following fields for each hour for the import price using the unit "\$/kWh" and also the following fields for the export price with the unit "export \$/kWh".
+If the rate has more than one value in each interval each value will have the fields shown in the next paragraph. For example, a rate with asymmetric prices where the import price is different from the expost price will need to have the following fields for each hour for the import price using the unit "\$/kWh" and also the following fields for the export price with the unit "export \$/kWh". When uploading export prices, use positive values for the amount the energy user will be paid for exporting electricity.
 
 Each time period (interval) contains these fields:
 * **DateStart** _required_ This is the date in UTC when the rate interval starts.
@@ -139,7 +139,7 @@ Uploaded rates must also contain rate information that makes up the header secti
 ### POST Rate Information
 
 _This function is available to authorized LSE accounts only._ <br>
-Populating the RateInfo and Value tables requires a call to the ValueData endpoint. Upload data may be encoded in XML or JSON. Acceptable data entries are catalogued in supporting MIDAS lookup tables listed in the Appendix. At the time the rate data is uploaded, it is also added to the HistoricalData table. For mor information, see [Archiving Data to HistoricalData](README.md#archived-data-in-the-historicaldata-table) in the main documentation. Each RIN may only store a total of 50,000 values in the Value table.
+Populating the RateInfo and Value tables requires a call to the ValueData endpoint. Upload data may be encoded in XML or JSON. Acceptable data entries are catalogued in supporting MIDAS lookup tables listed in the Appendix. At the time the rate data is uploaded, it is also added to the HistoricalData table and previous values in the Value table are deleted. For more information, see [Archiving Data to HistoricalData](README.md#archived-data-in-the-historicaldata-table) in the main documentation. Each RIN may only store a total of 50,000 values in the Value table.
 
 **Endpoint:** `/ValueData`
 
