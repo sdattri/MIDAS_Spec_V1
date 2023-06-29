@@ -42,9 +42,9 @@ The next step is to determine the distribution and energy company codes that mak
 
 2. *For partial rates from large IOUs and large CCAs that contain only costs from either distribution or energy:*
 
-  1. IOUs uploading their unbundled delivery-only rates, use the distribution code from the distribution provider and XX in place of the energy provider. For example, Pacific Gas and Electric uses the PG&E distribution company code **PG** and **XX** in place of the energy code, yielding **PGXX** for the second four characters.
-
-  2. CCAss uploading their unbundled energy-only rates, use the energy code from the energy provider and XX in place of the distribution provider. For example, Marin Clean Energy uses **XX** in place of the  distribution company code and the Marin Clean Energy energy code **MC**, yielding **XXMC** for the second four characters.
+    1. IOUs uploading their unbundled delivery-only rates, use the distribution code from the distribution provider and XX in place of the energy provider. For example, Pacific Gas and Electric uses the PG&E distribution company code **PG** and **XX** in place of the energy code, yielding **PGXX** for the second four characters.
+    
+    2. CCAss uploading their unbundled energy-only rates, use the energy code from the energy provider and XX in place of the distribution provider. For example, Marin Clean Energy uses **XX** in place of the  distribution company code and the Marin Clean Energy energy code **MC**, yielding **XXMC** for the second four characters.
 
 The third set of four characters are open for the LSE to define. These four alphanumeric characters (containing only uppercase English letters and the numeric digits 0-9) should, to the extent possible, reflect the rate. For example, a commercial TOU rate could have the four characters **CTOU**, or a critical-peak rate could have the characters **CPP2**.
 
