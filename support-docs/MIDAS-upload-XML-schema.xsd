@@ -101,6 +101,9 @@
                                 <xs:enumeration value="$/kWh" />\
                                 <xs:enumeration value="kg/kWh CO2" />\
                                 <xs:enumeration value="$/kW" />\
+                                <xs:enumeration value="backup $/kWh" />\
+                                <xs:enumeration value="export $/kWh" />\
+                                <xs:enumeration value="$/kvarh" />\
                               </xs:restriction>\
                             </xs:simpleType>\
                           </xs:element>\
