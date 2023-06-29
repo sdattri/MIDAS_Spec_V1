@@ -2,7 +2,7 @@
 
 Only CEC approved entities can upload to MIDAS. After establishing a MIDAS account by registering through the `registration` API endpoint and verifying your email, request upload capabilities by sending an email to midas@energy.ca.gov from your LSE email account. The email must come from a utility or CCA account, and should include the information you used when creating the account in MIDAS. CEC staff will review your request and respond.
 
-Note: Utilities may be assigned either distribution or energy company access to MIDAS. These assignments change what rates the user is allowed to upload. For now, LSE accounts will be assigned as energy companies, but this may change depending on ongoing discussions.
+Note: Utilities may be assigned either distribution or energy company access to MIDAS. These assignments change what rates the user is allowed to upload.
 
 ## Rate and Holiday Upload Support
 
@@ -36,13 +36,21 @@ The first step to uploading a rate to MIDAS is to determine the Rate Identificat
 
 For California-based LSEs, the first four characters of the RIN will always be **USCA**, showing that the LSE is in the United States (US) and California (CA). For utility users in other countries and states/provinces, refer to the **Country** and **State** lookup tables to find your country and state code.
 
-The next step is to determine the distribution and energy company codes that make up the next four characters of the RIN. Refer to the **Distribution** and **Energy** lookup tables to find the two character codes that correspond to your distribution and energy companies. For example, Marin Clean Energy would use the Pacific Gas and Electric distribution company code **PG** and the Marin Clean Energy energy code **MC**, yielding **PGMC** for the second four characters.
+The next step is to determine the distribution and energy company codes that make up the next four characters of the RIN. Refer to the **Distribution** and **Energy** lookup tables to find the two character codes that correspond to your distribution and energy companies. There are two pathways for this determination. The first applies to all rates for large POUs and to rates with all-in prices for large IOUs and CCAs. The second applies to unbundled rates from large IOUs and CCAs that are not cpiled into a single price.
 
-The next four characters are open for the LSE to define. These four alphanumeric characters (containing only uppercase English letters and the numeric digits 0-9) should, to the extent possible, reflect the rate. For example, a commercial TOU rate could have the four characters **CTOU**, or a critical-peak rate could have the characters **CPP2**.
+1. *For rates that contain both distribution and energy costs in the price:* Use the distribution code from the distribution provider and the energy code from the energy provider. For example, Marin Clean Energy would use the Pacific Gas and Electric distribution company code **PG** and the Marin Clean Energy energy code **MC**, yielding **PGMC** for the second four characters.
+
+2. *For partial rates from large IOUs and large CCAs that contain only costs from either distribution or energy:*
+
+  1. IOUs uploading their unbundled delivery-only rates, use the distribution code from the distribution provider and XX in place of the energy provider. For example, Pacific Gas and Electric uses the PG&E distribution company code **PG** and **XX** in place of the energy code, yielding **PGXX** for the second four characters.
+
+  2. CCAss uploading their unbundled energy-only rates, use the energy code from the energy provider and XX in place of the distribution provider. For example, Marin Clean Energy uses **XX** in place of the  distribution company code and the Marin Clean Energy energy code **MC**, yielding **XXMC** for the second four characters.
+
+The third set of four characters are open for the LSE to define. These four alphanumeric characters (containing only uppercase English letters and the numeric digits 0-9) should, to the extent possible, reflect the rate. For example, a commercial TOU rate could have the four characters **CTOU**, or a critical-peak rate could have the characters **CPP2**.
 
 The final four to 10 characters are the location code. For rates with no specific location, use the four character code **0000**. The list of allowable location codes are available in the **Location** lookup table. If your LSE has location codes to add to that table, contact the MIDAS team at midas@energy.ca.gov to request the addition of those codes.
 
-Putting this together for a full example, the full RIN for a rate at Marin Clean Energy could be **USCA-PGMC-CTOU-0000**.
+Putting this together for a full example, the full RIN for an all-in rate at Marin Clean Energy could be **USCA-PGMC-CTOU-0000**.
 
 ### Rate Upload Data Structure
 
