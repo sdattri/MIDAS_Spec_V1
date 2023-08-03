@@ -135,11 +135,11 @@ Uploaded rates must also contain rate information that makes up the header secti
 
 * **RateID** _required_ This is the Rate Identification Number (RIN)
 * **RateName** _required_ The LSE’s name for the rate plan, consistent with the CEC’s Interval Meter Database as required by California Code of Regulations, Title 20, section 134¬4
+* **RateType** _required_ The applicable rate type; must be one of those in the RateType lookup table
 * **AltRateName1** _optional_ An alternative name for the rate
 * **AltRateName2** _optional_ A second alternative name for the rate
 * **SignupCloseDate** _optional_ The last day a customer may sign up for the rate
 * **RatePlan_Url** _optional_ A valid URL that directs to the utility webpage describing the rate plan
-* **RateType** _optional_ The applicable rate type; must be one of those in the RateType lookup table
 * **Sector** _optional_ The sector that the rate applies to; must be one of those in the Sector lookup table
 * **EndUse** _optional_ The end use that the rate applies to; must be one of those in the EndUse lookup table
 * **API_Url** _optional_ A valid uniform resource locator (URL) that specifies the API that provides the values
