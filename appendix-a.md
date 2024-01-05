@@ -10,6 +10,7 @@ LSEs are encouraged to reach out to CEC staff at midas@energy.ca.gov with any qu
 
 The rate upload XML schema is available through the MIDAS API. The version from the API is the canonical one. However, we are also providing the XML schema document as part of this documentation. [XML Schema Document](support-docs/MIDAS-upload-XML-schema.xsd).
 
+**JSON uploads are experimental and may not function correctly in all instances. Please use XML to upload rates until JSON support is completed.**
 
 ## Rate Definitions
 
@@ -212,7 +213,7 @@ When uploading to the Holiday table, the body of the uploaded XML or JSON has th
 |-----------------------------------|----------------------------------------------------------|---------|------|
 | EnergyCode <br> _required_        | Two letter code for LSE from the Energy lookup table     | "MC" | string |
 | EnergyDescription <br> _required_ | Full name of the LSE from the Energy lookup table        | "Marin Clean Energy" | string |
-| DateOfHoliday <br> _required_     | Date of holiday in local time. <br>For California PST format: "YYYY-MM-DDTHH:MM:SS-07:00" | "2023-12-25T00:00:00-07:00" | date   |
+| DateOfHoliday <br> _required_     | Datetime of holiday start in local time. <br>For California PST format: "YYYY-MM-DDTHH:MM:SS-07:00" | "2023-12-25T00:00:00-07:00" | date   |
 | HolidayDescription                | Full name of holiday                                     | "Christmas 2023" | string |
 
 **Response:** A successful upload will return an HTMLStatusCode of 200
