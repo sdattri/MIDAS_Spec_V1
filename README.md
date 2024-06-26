@@ -281,6 +281,8 @@ ValueData collection will each include the following fields:<br>
 | DayEnd | Day type of pricing period, from DayType table | "Wednesday" | string |
 | TimeStart | Time of pricing period start, in UTC | "08:00:00" | string |
 | TimeEnd | Time of pricing period end, in UTC | "08:59:59" | string |
+| Unit | Unit associated with value, from unit lookup table | "kWh" | string |
+| Value | Value of price or emissions | 0.36 | decimal |
 
 Combining DateStart with TimeStart is the UTC datetime for the start of the period, and combining DateEnd with TimeEnd is the UTC datetime for the start of the period.
 
