@@ -155,7 +155,7 @@ After registering and verifying your email address, you can make a GET call to t
 
 **Endpoint:** `/Token`
 
-**HTTP Request:** `POST https://midasapi.energy.ca.gov/api/Token`
+**HTTP Request:** `GET https://midasapi.energy.ca.gov/api/Token`
 
 **Authorization:** Basic
 
@@ -196,7 +196,7 @@ To receive a list of RINs in the MIDAS database, users may query the API using t
 
 **Endpoint:** `/ValueData`
 
-**HTTP Request:** `POST https://midasapi.energy.ca.gov/api/ValueData?SignalType={SignalType}`
+**HTTP Request:** `GET https://midasapi.energy.ca.gov/api/ValueData?SignalType={SignalType}`
 
 **Authorization:** Bearer
 
@@ -240,7 +240,7 @@ Use this query to receive values and other information on a specified RIN. Pass 
 
 **Endpoint:** `/ValueData`
 
-**HTTP Request:** `POST https://midasapi.energy.ca.gov/api/ValueData?ID={ID}&QueryType=(QueryType)`
+**HTTP Request:** `GET https://midasapi.energy.ca.gov/api/ValueData?ID={ID}&QueryType=(QueryType)`
 
 **Authorization:** Bearer
 
@@ -310,7 +310,7 @@ To get the values stored in each lookup table, use the GET Lookup Table call. Th
 
 **Endpoint:** `/ValueData`
 
-**HTTP Request:** `POST https://midasapi.energy.ca.gov/api/ValueData?LookupTable={LookupTable}`
+**HTTP Request:** `GET https://midasapi.energy.ca.gov/api/ValueData?LookupTable={LookupTable}`
 
 **Authorization:** Bearer
 
@@ -352,7 +352,7 @@ Holidays that apply to rates are stored in the Holiday table. There is no parame
 
 **Endpoint:** `/Holiday`
 
-**HTTP Request:** `POST https://midasapi.energy.ca.gov/api/Holiday`
+**HTTP Request:** `GET https://midasapi.energy.ca.gov/api/Holiday`
 
 **Authorization:** Bearer
 
@@ -392,7 +392,7 @@ This call will retrieve all RINs with information stored in the HistoricalData t
 
 **Endpoint:** `/HistoricalList`
 
-**HTTP Request:** `POST https://midasapi.energy.ca.gov/api/HistoricalList?DistributionCode={DistributionCode}&EnergyCode={EnergyCode}`
+**HTTP Request:** `GET https://midasapi.energy.ca.gov/api/HistoricalList?DistributionCode={DistributionCode}&EnergyCode={EnergyCode}`
 
 **Authorization:** Bearer
 
@@ -436,7 +436,7 @@ To receive historical information, all accounts may query the GET RIN History Da
 
 **Endpoint:** `/HistoricalData`
 
-**HTTP Request:** `POST https://midasapi.energy.ca.gov/api/HistoricalData/{id}?startdate={startdate}&enddate={enddate}`
+**HTTP Request:** `GET https://midasapi.energy.ca.gov/api/HistoricalData/{id}?startdate={startdate}&enddate={enddate}`
 
 **Authorization:** Bearer
 

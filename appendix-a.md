@@ -59,7 +59,7 @@ The canonical requirements for the rate upload structure is the XML rate upload 
 
 **Endpoint:** `/ValueData`
 
-**HTTP Request:** `POST https://midasapi.energy.ca.gov/api/ValueData`
+**HTTP Request:** `GET https://midasapi.energy.ca.gov/api/ValueData`
 
 **Authorization:** Bearer
 
