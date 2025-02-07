@@ -3,8 +3,6 @@ Market Informed Demand Automation Server (MIDAS) Documentation
 
 _Interacting with the MIDAS API_
 
-[[_TOC_]]
-
 # Introduction
 
 The California Energy Commission’s (CEC) Market Informed Demand Automation Server (MIDAS) is a database and application programming interface (API) that provides access to current, future, and historic time-varying rates, greenhouse gas (GHG) emissions associated with electrical generation, and California Flex Alert Signals. The database is populated by utilities and community choice aggregators (CCAs), WattTime’s Self-Generation Incentive Program (SGIP) marginal GHG emissions API, the California Independent System Operator (California ISO), and other entities that are registered with the MIDAS system.
