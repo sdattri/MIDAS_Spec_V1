@@ -33,11 +33,11 @@ Here are some example rate upload documents to help LSEs format rate uploads. Ea
 
 ### Assigning a RIN
 
-The first step to uploading a rate to MIDAS is to determine the Rate Identification Number (RIN). See [Figure 1](README.md#database-structure) for the RIN structure. If a rate already exists in MIDAS and you don't have the RIN available, refer to the [Get RIN LIST](README.md#get-rin-list) section in the main docuemntation to download the list of RINs, and make sure to use the existing RIN. If the rate has never been previously uploaded to MIDAS, you will need to determine the RIN before uploading.
+The first step in uploading a rate to MIDAS is to determine the Rate Identification Number (RIN). See [Figure 1](README.md#database-structure) for the RIN structure. If a rate already exists in MIDAS and you don't have the RIN available, refer to the [Get RIN LIST](README.md#get-rin-list) section in the main documentation to download the list of RINs, and make sure to use the existing RIN. If the rate has never been previously uploaded to MIDAS, you will need to determine the RIN before uploading.
 
 For California-based LSEs, the first four characters of the RIN will always be **USCA**, showing that the LSE is in the United States (US) and California (CA). For utility users in other countries and states/provinces, refer to the **Country** and **State** lookup tables to find your country and state code.
 
-The next step is to determine the distribution and energy company codes that make up the next four characters of the RIN. Refer to the **Distribution** and **Energy** lookup tables to find the two character codes that correspond to your distribution and energy companies. There are two pathways for this determination. The first applies to all rates for large POUs and to rates with all-in prices for large IOUs and CCAs. The second applies to unbundled rates from large IOUs and CCAs that are not cpiled into a single price.
+The next step is to determine the distribution and energy company codes that make up the next four characters of the RIN. Refer to the **Distribution** and **Energy** lookup tables to find the two character codes that correspond to your distribution and energy companies. There are two pathways for this determination. The first applies to all rates for large POUs and to rates with all-in prices for large IOUs and CCAs. The second applies to unbundled rates from large IOUs and CCAs that are not compiled into a single price.
 
 1. *For rates that contain both distribution and energy costs in the price:* Use the distribution code from the distribution provider and the energy code from the energy provider. For example, Marin Clean Energy would use the Pacific Gas and Electric distribution company code **PG** and the Marin Clean Energy energy code **MC**, yielding **PGMC** for the second four characters.
 
@@ -74,7 +74,7 @@ import requests
 import xml.etree.ElementTree as ET
 
 headers = {'accept': 'application/json', 'Authorization': "Bearer " + token}
-url = 'https://midasapi.energy.ca.gov/api/valuedata'
+url = 'https://midasapi.energy.ca.gov/api/ValueData'
 pricing_response = requests.get(url, headers = headers)
 
 element = ET.XML(json.loads(pricing_response.text))
@@ -167,11 +167,11 @@ import os
 import sys
 import requests
 
-# File on the local filesystem that is correctly formatted against the XML schema definition (XSD) or analagously formatted JSON.
+# File on the local filesystem that is correctly formatted against the XML schema definition (XSD) or analogously formatted JSON.
 priceFileName = 'XML_streaming_upload.xml'
 
 headers = {'accept': 'application/json', 'Content-Type': 'text/xml', 'Authorization': "Bearer " + token}
-url = 'https://midasapi.energy.ca.gov/api/valuedata'
+url = 'https://midasapi.energy.ca.gov/api/ValueData'
 priceFile = open(priceFileName)
 xml = priceFile.read()
 priceFile.close()
