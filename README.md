@@ -7,11 +7,11 @@ _Interacting with the MIDAS API_
 
 The California Energy Commission’s (CEC) Market Informed Demand Automation Server (MIDAS) is a database and application programming interface (API) that provides access to current, future, and historic time-varying rates, greenhouse gas (GHG) emissions associated with electrical generation, and California Flex Alert Signals. The database is populated by utilities and community choice aggregators (CCAs), WattTime’s Self-Generation Incentive Program (SGIP) marginal GHG emissions API, the California Independent System Operator (California ISO), and other entities that are registered with the MIDAS system.
 
-MIDAS is designed to provide energy users with the electricity price information they need to optimize when they use energy. While it would be useful for electricity users to be able to use the data from MIDAS to try to estimate electricity bill totals, some billing structures such as tiered rates make this impossible without private customer-specific data. MIDAS does not and will not contain any private information. The only non-public data in MIDAS is login information.
+MIDAS is designed to provide energy users with the electricity price information they need to optimize when they use energy. While it would be useful for electricity users to be able to use the data from MIDAS to try to estimate electricity bill totals, some billing structures such as tiered rates make this impossible without private customer-specific data. MIDAS does not, and will not, contain any private information. The only non-public data in MIDAS is login information.
 
-MIDAS is accessible through a public API at <https://midasapi.energy.ca.gov> in two standard machine-readable formats: JavaScript Object Notation (JSON), and extensible markup language (XML). MIDAS is public and accessible for all registered users to query and download information by interacting with the MIDAS API. Registration is a simple process available through the API. CEC strongly encourages load serving entity (LSE) users have programming skills and software to effectively upload and maintain rate information stored in the database. Non-LSE users should be able to retrieve information stored in MIDAS without extensive programming skills. Retrieving MIDAS-hosted data can be easily done through the code examples provided or through a user’s own code. For instructions on accessing the MIDAS database, see [Getting Information from MIDAS](#getting-information-from-midas).
+MIDAS is accessible through a public API at <https://midasapi.energy.ca.gov> in two standard machine-readable formats: JavaScript Object Notation (JSON), and extensible markup language (XML). MIDAS is publicly accessible, allowing all registered users to query and download information by interacting with the MIDAS API. Registration is a simple process available through the API. CEC strongly encourages load serving entity (LSE) users have programming skills and software to effectively upload and maintain rate information stored in the database. Non-LSE users should be able to retrieve information stored in MIDAS without extensive programming skills. Retrieving MIDAS-hosted data can be easily done through the code examples provided or through a user’s own code. For instructions on accessing the MIDAS database, see [Getting Information from MIDAS](#getting-information-from-midas).
 
-MIDAS was developed to support the CEC's [Load Management Standards](https://www.energy.ca.gov/proceedings/energy-commission-proceedings/load-management-rulemaking). The full text of the standards is available from [Westlaw](https://govt.westlaw.com/calregs/Browse/Home/California/CaliforniaCodeofRegulations?guid=ID6B950105CCE11EC9220000D3A7C4BC3).
+MIDAS was developed to support the CEC's [Load Management Standards](https://www.energy.ca.gov/programs-and-topics/topics/load-flexibility/load-management-standards). The full text of the standards is available from [Westlaw](https://govt.westlaw.com/calregs/Browse/Home/California/CaliforniaCodeofRegulations?guid=ID6B950105CCE11EC9220000D3A7C4BC3).
 
 
 # Database Structure
@@ -23,10 +23,10 @@ Pursuant to the California Load Management Standards, the state’s largest util
 The primary lookup identification (ID) for the MIDAS database is a compound key comprised of six individual fields that make up a standardized rate identification number (RIN) as shown in Figure 1. RINs are assigned at the time rate information is first uploaded by the LSE through the MIDAS API. When an LSE uploads to an existing RIN, the correct RIN must be used at the time of upload. Figure 1 illustrates the six identifiers that comprise a RIN: Country, State, Distribution, Energy, Rate, and Location. The location portion of the RIN may consist of 1 to 10 characters depending on the specified location’s requirements.
 
 Figure 1. Rate Identification Number Structure<br>
-![Rate Identifican Number Specification](img/RIN-structure.png)<br>
+![Rate Identification Number Specification](img/RIN-structure.png)<br>
 Source: California Energy Commission
 
-Rate Indentification Numbers do not change over time. The prices and values may change, but an electricity customer's RIN should not change unless their rate components or rate modifiers change or the utility or customer changes their rate tarrif.
+Rate Identification Numbers do not change over time. The prices and values may change, but an electricity customer's RIN should not change unless their rate components or rate modifiers change or the utility or customer changes their rate tariff.
 
 ## Rate Information
 
@@ -34,11 +34,11 @@ To fulfill the requirements of the California's load management standards, MIDAS
 
 ## SGIP GHG Emissions
 
-WattTime estimates GHG emissions for 11 regions across the state of California providing real-time and forecasted values for each. MIDAS includes a total of 33 different GHG RINS for California - real-time, forecasted, and historic. RINs with the first 12 characters USCA-SGIP-SGRT-XXXX, USCA-SGIP-SGFC-XXXX, and USCA-SGIP-SGHT-XXXX allow access to the GHG information retrieved from the [WattTime.org SGIP API](https://sgipsignal.com) by MIDAS. The portion of the RIN specified as “SGRT” stands for “SGIP real-time”, “SGFC” stands for “SGIP forecast”, and “SGHT” stands for “SGIP historic”. The SGRT RIN will return only one data point that specifies the current CO2 level for the specified region. The SGFC RIN will return the forecasted CO2 levels, at 5-minute intervals, available from the WattTime API. SGHT RINs will return the historic information for each SGIP GHG emissions region. Once a real-time emissions value is replaced with a new current value, the information is moved to the HistoricalData table where it can be retrieved through the SGHT RIN. For a list of the regions and region abbreviations please see WattTime’s SGIP webpage at: <https://sgipsignal.com/grid-regions>.
+WattTime estimates GHG emissions for 11 regions across the state of California providing real-time and forecasted values for each. MIDAS includes a total of 33 different GHG RINs for California - real-time, forecasted, and historic. RINs with the first 12 characters USCA-SGIP-SGRT-XXXX, USCA-SGIP-SGFC-XXXX, and USCA-SGIP-SGHT-XXXX allow access to the GHG information retrieved from the [WattTime.org SGIP API](https://sgipsignal.com) by MIDAS. The portion of the RIN specified as “SGRT” stands for “SGIP real-time”, “SGFC” stands for “SGIP forecast”, and “SGHT” stands for “SGIP historic”. The SGRT RIN will return only one data point that specifies the current CO2 level for the specified region. The SGFC RIN will return the forecasted CO2 levels, at 5-minute intervals, available from the WattTime API. SGHT RINs will return the historic information for each SGIP GHG emissions region. Once a real-time emissions value is replaced with a new current value, the information is moved to the HistoricalData table where it can be retrieved through the SGHT RIN. For a list of the regions and region abbreviations please see WattTime’s SGIP webpage at: <https://sgipsignal.com/grid-regions>.
 
 ## CAISO Flex Alerts
 
-MIDAS includes three different Flex Alert RINS - real-time, forecasted, and historic values with dates and times of previous Flex Alerts. The California ISO maintains information as to whether there is an active Flex Alert and whether one is planned. MIDAS checks the California ISO Flex Alert web page for Flex Alerts and adds it to the database.
+MIDAS includes three different Flex Alert RINs: real-time, forecasted, and historic values, along with dates and times of previous Flex Alerts. The California ISO maintains information as to whether there is an active Flex Alert and whether one is planned. MIDAS checks the California ISO Flex Alert webpage for Flex Alerts and adds them to the database.
 
 RINs of USCA-FLEX-FXRT-0000 and USCA-FLEX-FXFC-0000 check for CA ISO Flex Alerts at the moment a query is initiated through the MIDAS API. The result is passed through to the querying user directly. The “FXRT” portion of the first RIN stands for “Flex Alert real-time” and “FXFC” in the second RIN stands for “Flex Alert forecasted”. In the RIN USCA-FLEX-FXHT-0000, “FXHT” stands for “Flex Alert historical”. All previously active Flex Alerts will be reflected in the information retrieved with this RIN.
 For more information on the XML schema and uploads, see [Appendix A](appendix-a.md).
@@ -53,7 +53,7 @@ The data in the HistoricalData table will always be up to date as well as provid
 
 The MIDAS API is a Representational State Transfer Application Programming Interface (RESTful API) accessible using any programming language able to create instances of a Hypertext Transfer Protocol (HTTP) Client, HTTP Request and HTTP Response classes. Users may develop their own in-house software to connect with the MIDAS RESTful API. The requests (calls) and responses should be executed asynchronously. Most software for interacting with APIs will allow easy interaction with the MIDAS API.
 
-The MIDAS REST API and Database are protected by the CEC firewall and data throttling to prevent distributed denial of service (DDoS) attacks (see [Appendix D](appendix-d.md)). If an error occurs after an API call, the program will send a notification for CEC information technology (IT) staff to fix the issue.
+The MIDAS API and database are protected by the CEC firewall and data throttling to prevent Distributed Denial of Service (DDoS) attacks (see [Appendix D](appendix-d.md)). If an error occurs after an API call, the program will send a notification for CEC information technology (IT) staff to fix the issue.
 
 The MIDAS API is comprised of six endpoints:
 
@@ -474,7 +474,7 @@ _**Only CEC approved accounts may upload data to MIDAS.**_
 See [Appendix A](appendix-a.md) for in-depth details on uploading rates to MIDAS.
 
 
-# Example Code
+# Example Codes
 
 These are several sets of example code and an R package for working with the MIDAS API.
 
