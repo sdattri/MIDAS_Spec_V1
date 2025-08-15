@@ -1,0 +1,910 @@
+openapi: 3.1.0
+info:
+  title: MIDAS API
+  description: Market Informed Demand Automation Server API
+  version: 2.0.0
+  contact:
+    name: California Energy Commission
+    email: midas@energy.ca.gov
+  license:
+    name: MIT
+servers:
+  - url: https://midasapi.energy.ca.gov
+    description: Production server
+  - url: https://dev-midasapi.energy.ca.gov
+    description: Development server
+
+paths:
+  /health:
+    get:
+      summary: Health check endpoint
+      description: Returns system health status
+      responses:
+        '200':
+          description: System is healthy
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HealthResponse'
+
+  /api/Registration:
+    post:
+      summary: Register new user account
+      description: Creates a new user account with email verification
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RegistrationRequest'
+          application/xml:
+            schema:
+              $ref: '#/components/schemas/RegistrationRequest'
+      responses:
+        '200':
+          description: Registration successful
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RegistrationResponse'
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/RegistrationResponse'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '409':
+          $ref: '#/components/responses/Conflict'
+
+  /api/Token:
+    get:
+      summary: Get authentication token
+      description: Retrieves JWT token for API access
+      security:
+        - basicAuth: []
+      responses:
+        '200':
+          description: Token retrieved successfully
+          headers:
+            Token:
+              schema:
+                type: string
+              description: JWT authentication token
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TokenResponse'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+
+  /api/ValueData:
+    get:
+      summary: Retrieve rate data, schema, or lookup tables
+      description: Get rate information, lookup tables, or XML schema based on query parameters
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: SignalType
+          in: query
+          description: Signal type filter (0=all, 1=electricity rates, 2=GHG emissions, 3=Flex Alerts)
+          schema:
+            type: integer
+            enum: [0, 1, 2, 3]
+        - name: ID
+          in: query
+          description: Rate Identification Number (RIN) for specific rate data
+          schema:
+            type: string
+            pattern: '^[A-Z]{4}-[A-Z0-9]{4}-[A-Z0-9]{4}-[A-Z0-9]{4}$'
+            example: "USCA-PGMC-CTOU-0000"
+        - name: QueryType
+          in: query
+          description: Type of data query (realtime or complete data)
+          schema:
+            type: string
+            enum: [realtime, alldata]
+        - name: LookupTable
+          in: query
+          description: Lookup table name to retrieve
+          schema:
+            type: string
+            enum: [Country, Energy, Distribution, Daytype, Enduse, Location, Ratetype, Sector, State, Unit]
+      responses:
+        '200':
+          description: Data retrieved successfully
+          content:
+            application/json:
+              schema:
+                oneOf:
+                  - $ref: '#/components/schemas/RateInfoList'
+                  - $ref: '#/components/schemas/RateDataResponse'
+                  - $ref: '#/components/schemas/LookupTableResponse'
+                  - $ref: '#/components/schemas/XMLSchemaResponse'
+            application/xml:
+              schema:
+                type: string
+                description: XML response for rate data or schema
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '503':
+          $ref: '#/components/responses/ServiceUnavailable'
+    post:
+      summary: Upload rate data
+      description: Upload rate information and values (LSE accounts only)
+      security:
+        - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RateUploadRequest'
+          application/xml:
+            schema:
+              type: string
+              description: XML formatted rate data
+      responses:
+        '200':
+          description: Upload successful
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UploadResponse'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '413':
+          $ref: '#/components/responses/PayloadTooLarge'
+        '429':
+          $ref: '#/components/responses/TooManyRequests'
+
+  /api/Holiday:
+    get:
+      summary: Retrieve holiday information
+      description: Get holiday data for energy providers
+      security:
+        - bearerAuth: []
+      responses:
+        '200':
+          description: Holiday data retrieved successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HolidayListResponse'
+            application/xml:
+              schema:
+                type: string
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+    post:
+      summary: Upload holiday data
+      description: Upload holiday information (LSE accounts only)
+      security:
+        - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/HolidayUploadRequest'
+          application/xml:
+            schema:
+              type: string
+      responses:
+        '200':
+          description: Holiday upload successful
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UploadResponse'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '417':
+          $ref: '#/components/responses/ExpectationFailed'
+
+  /api/HistoricalList:
+    get:
+      summary: Retrieve historical RIN list
+      description: Get list of historical RINs for specific distribution and energy providers
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: DistributionCode
+          in: query
+          description: Distribution company code
+          schema:
+            type: string
+            pattern: '^[A-Z]{2}$'
+        - name: EnergyCode
+          in: query
+          description: Energy company code
+          schema:
+            type: string
+            pattern: '^[A-Z]{2}$'
+      responses:
+        '200':
+          description: Historical RIN list retrieved successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HistoricalRateInfoList'
+            application/xml:
+              schema:
+                type: string
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+
+  /api/HistoricalData:
+    get:
+      summary: Retrieve historical rate data
+      description: Get historical rate data for specific RIN and date range
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: id
+          in: query
+          required: true
+          description: Rate Identification Number (RIN)
+          schema:
+            type: string
+            pattern: '^[A-Z]{4}-[A-Z0-9]{4}-[A-Z0-9]{4}-[A-Z0-9]{4}$'
+        - name: startdate
+          in: query
+          required: true
+          description: Start date for historical data (YYYY-MM-DD)
+          schema:
+            type: string
+            format: date
+        - name: enddate
+          in: query
+          required: true
+          description: End date for historical data (YYYY-MM-DD)
+          schema:
+            type: string
+            format: date
+      responses:
+        '200':
+          description: Historical data retrieved successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HistoricalRateDataResponse'
+            application/xml:
+              schema:
+                type: string
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+
+components:
+  securitySchemes:
+    basicAuth:
+      type: http
+      scheme: basic
+      description: Base64 encoded username:password
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+      description: JWT token obtained from /api/Token endpoint
+
+  schemas:
+    # Health and System Responses
+    HealthResponse:
+      type: object
+      properties:
+        status:
+          type: string
+          example: "healthy"
+        service:
+          type: string
+          example: "midas-api"
+        version:
+          type: string
+          example: "2.0.0"
+        timestamp:
+          type: string
+          format: date-time
+
+    # Authentication and Registration
+    RegistrationRequest:
+      type: object
+      required:
+        - fullname
+        - username
+        - password
+        - emailaddress
+      properties:
+        fullname:
+          type: string
+          description: Base64 encoded full name
+          example: "Sm9obiBEb2U="
+        username:
+          type: string
+          description: Base64 encoded username
+          example: "am9obmRvZQ=="
+        password:
+          type: string
+          description: Base64 encoded password
+          example: "cGFzc3dvcmQxMjM="
+        emailaddress:
+          type: string
+          description: Base64 encoded email address
+          example: "am9obi5kb2VAZXhhbXBsZS5jb20="
+        organization:
+          type: string
+          description: Base64 encoded organization name
+          example: "QWNtZSBFbmVyZ3k="
+
+    RegistrationResponse:
+      type: object
+      properties:
+        message:
+          type: string
+          example: "Registration successful. Please check your email for verification."
+        username:
+          type: string
+          example: "johndoe"
+
+    TokenResponse:
+      type: object
+      properties:
+        token:
+          type: string
+          description: JWT authentication token
+        expires_in:
+          type: integer
+          description: Token expiration time in seconds
+          example: 600
+
+    # Rate Information Models
+    RateInfo:
+      type: object
+      properties:
+        RateID:
+          type: string
+          description: Rate Identification Number (RIN)
+          pattern: '^[A-Z]{4}-[A-Z0-9]{4}-[A-Z0-9]{4}-[A-Z0-9]{4}$'
+          example: "USCA-PGMC-CTOU-0000"
+        SignalType:
+          type: string
+          description: Signal type in string format
+          enum: ["Electricity Rates", "Greenhouse Gas Emissions", "Flex Alerts"]
+        Description:
+          type: string
+          description: Human readable description
+          example: "Pacific Gas & Electric Commercial Time-of-Use Rate"
+
+    RateInfoList:
+      type: object
+      properties:
+        rates:
+          type: array
+          items:
+            $ref: '#/components/schemas/RateInfo'
+
+    RateDataResponse:
+      type: object
+      properties:
+        RateInfo:
+          $ref: '#/components/schemas/RateInfoDetail'
+        ValueData:
+          type: array
+          items:
+            $ref: '#/components/schemas/ValueData'
+
+    RateInfoDetail:
+      type: object
+      properties:
+        RateID:
+          type: string
+          example: "USCA-PGMC-CTOU-0000"
+        RateName:
+          type: string
+          example: "Commercial Time-of-Use"
+        RateType:
+          type: string
+          example: "TOU"
+        Sector:
+          type: string
+          example: "Commercial"
+        EndUse:
+          type: string
+          example: "General"
+        ApiUrl:
+          type: string
+          format: uri
+          example: "https://api.pge.com/rates/commercial"
+        RatePlanUrl:
+          type: string
+          format: uri
+          example: "https://www.pge.com/tariffs/commercial"
+        AltRateName1:
+          type: string
+          example: "C-TOU"
+        AltRateName2:
+          type: string
+          example: "Commercial TOU"
+        SignupCloseDate:
+          type: string
+          format: date
+          example: "2024-12-31"
+        Description:
+          type: string
+          example: "Commercial time-of-use electricity rate"
+
+    ValueData:
+      type: object
+      properties:
+        DateStart:
+          type: string
+          format: date
+          example: "2024-01-01"
+        TimeStart:
+          type: string
+          format: time
+          example: "00:00:00"
+        DateEnd:
+          type: string
+          format: date
+          example: "2024-12-31"
+        TimeEnd:
+          type: string
+          format: time
+          example: "23:59:59"
+        DayStart:
+          type: integer
+          minimum: 0
+          maximum: 6
+          description: Day of week start (0=Sunday, 6=Saturday)
+          example: 1
+        DayEnd:
+          type: integer
+          minimum: 0
+          maximum: 6
+          description: Day of week end (0=Sunday, 6=Saturday)
+          example: 5
+        Value:
+          type: number
+          format: float
+          minimum: 0
+          example: 0.15
+        Unit:
+          type: string
+          example: "$/kWh"
+        ValueName:
+          type: string
+          example: "Peak Rate"
+
+    # Upload Models
+    RateUploadRequest:
+      type: object
+      required:
+        - RateInfo
+        - ValueData
+      properties:
+        RateInfo:
+          $ref: '#/components/schemas/RateInfoUpload'
+        ValueData:
+          type: array
+          items:
+            $ref: '#/components/schemas/ValueDataUpload'
+          maxItems: 50000
+
+    RateInfoUpload:
+      type: object
+      required:
+        - RateID
+        - RateName
+        - RateType
+        - SignalType
+        - Description
+      properties:
+        RateID:
+          type: string
+          pattern: '^[A-Z]{4}-[A-Z0-9]{4}-[A-Z0-9]{4}-[A-Z0-9]{4}$'
+          example: "USCA-PGMC-CTOU-0000"
+        RateName:
+          type: string
+          maxLength: 255
+          example: "Commercial Time-of-Use"
+        RateType:
+          type: string
+          maxLength: 50
+          example: "TOU"
+        Sector:
+          type: string
+          maxLength: 50
+        EndUse:
+          type: string
+          maxLength: 50
+        ApiUrl:
+          type: string
+          format: uri
+          maxLength: 500
+        RatePlanUrl:
+          type: string
+          format: uri
+          maxLength: 500
+        AltRateName1:
+          type: string
+          maxLength: 255
+        AltRateName2:
+          type: string
+          maxLength: 255
+        SignupCloseDate:
+          type: string
+          format: date
+        SignalType:
+          type: integer
+          enum: [1, 2, 3]
+          description: "1=electricity rates, 2=GHG emissions, 3=Flex Alert"
+        Description:
+          type: string
+          maxLength: 1000
+
+    ValueDataUpload:
+      type: object
+      required:
+        - DateStart
+        - TimeStart
+        - DateEnd
+        - TimeEnd
+        - DayStart
+        - DayEnd
+        - Value
+        - Unit
+        - ValueName
+      properties:
+        DateStart:
+          type: string
+          format: date
+        TimeStart:
+          type: string
+          format: time
+        DateEnd:
+          type: string
+          format: date
+        TimeEnd:
+          type: string
+          format: time
+        DayStart:
+          type: integer
+          minimum: 0
+          maximum: 6
+        DayEnd:
+          type: integer
+          minimum: 0
+          maximum: 6
+        Value:
+          type: number
+          format: float
+          minimum: 0
+        Unit:
+          type: string
+          maxLength: 50
+        ValueName:
+          type: string
+          maxLength: 255
+
+    UploadResponse:
+      type: object
+      properties:
+        message:
+          type: string
+          example: "Upload successful. Data is being processed."
+        upload_id:
+          type: string
+          format: uuid
+          example: "123e4567-e89b-12d3-a456-426614174000"
+        processing_time_estimate:
+          type: string
+          example: "Processing will complete within 1 hour"
+
+    # Holiday Models
+    HolidayListResponse:
+      type: object
+      properties:
+        holidays:
+          type: array
+          items:
+            $ref: '#/components/schemas/Holiday'
+
+    Holiday:
+      type: object
+      properties:
+        EnergyCode:
+          type: string
+          pattern: '^[A-Z]{2}$'
+          example: "PG"
+        EnergyDescription:
+          type: string
+          example: "Pacific Gas & Electric"
+        DateOfHoliday:
+          type: string
+          format: date
+          example: "2024-01-01"
+        HolidayDescription:
+          type: string
+          example: "New Year's Day"
+
+    HolidayUploadRequest:
+      type: object
+      required:
+        - holidays
+      properties:
+        holidays:
+          type: array
+          items:
+            $ref: '#/components/schemas/HolidayUpload'
+
+    HolidayUpload:
+      type: object
+      required:
+        - EnergyCode
+        - EnergyDescription
+        - DateOfHoliday
+      properties:
+        EnergyCode:
+          type: string
+          pattern: '^[A-Z]{2}$'
+          example: "PG"
+        EnergyDescription:
+          type: string
+          maxLength: 255
+          example: "Pacific Gas & Electric"
+        DateOfHoliday:
+          type: string
+          format: date
+          example: "2024-01-01"
+        HolidayDescription:
+          type: string
+          maxLength: 255
+          example: "New Year's Day"
+
+    # Lookup Table Models
+    LookupTableResponse:
+      type: object
+      properties:
+        table_name:
+          type: string
+          example: "Country"
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/LookupTableEntry'
+
+    LookupTableEntry:
+      type: object
+      properties:
+        UploadCode:
+          type: string
+          example: "US"
+        Description:
+          type: string
+          example: "United States"
+
+    # Historical Data Models
+    HistoricalRateInfoList:
+      type: object
+      properties:
+        historical_rates:
+          type: array
+          items:
+            $ref: '#/components/schemas/HistoricalRateInfo'
+
+    HistoricalRateInfo:
+      type: object
+      properties:
+        RateID:
+          type: string
+          example: "USCA-PGMC-CTOU-0000"
+        Description:
+          type: string
+          example: "Pacific Gas & Electric Commercial Time-of-Use Rate"
+        ArchivedAt:
+          type: string
+          format: date-time
+          example: "2024-01-01T12:00:00Z"
+
+    HistoricalRateDataResponse:
+      type: object
+      properties:
+        RateInfo:
+          $ref: '#/components/schemas/RateInfoDetail'
+        ValueData:
+          type: array
+          items:
+            $ref: '#/components/schemas/ValueData'
+        DateRange:
+          type: object
+          properties:
+            StartDate:
+              type: string
+              format: date
+            EndDate:
+              type: string
+              format: date
+
+    # Schema Response
+    XMLSchemaResponse:
+      type: object
+      properties:
+        schema:
+          type: string
+          description: XML schema definition
+        version:
+          type: string
+          example: "1.0"
+
+    # Error Models
+    Error:
+      type: object
+      required:
+        - error
+      properties:
+        error:
+          type: object
+          required:
+            - code
+            - message
+            - timestamp
+          properties:
+            code:
+              type: string
+              example: "VALIDATION_ERROR"
+            message:
+              type: string
+              example: "Invalid RateID format"
+            details:
+              type: string
+              example: "RateID must follow format CCSS-DDEE-RRRR-LLLL"
+            timestamp:
+              type: string
+              format: date-time
+              example: "2024-01-01T12:00:00Z"
+            request_id:
+              type: string
+              format: uuid
+              example: "123e4567-e89b-12d3-a456-426614174000"
+
+    ValidationError:
+      type: object
+      properties:
+        error:
+          type: object
+          properties:
+            code:
+              type: string
+              example: "VALIDATION_ERROR"
+            message:
+              type: string
+              example: "Request validation failed"
+            details:
+              type: string
+              example: "Multiple validation errors occurred"
+            timestamp:
+              type: string
+              format: date-time
+            request_id:
+              type: string
+              format: uuid
+            validation_errors:
+              type: array
+              items:
+                type: object
+                properties:
+                  field:
+                    type: string
+                    example: "RateID"
+                  message:
+                    type: string
+                    example: "Invalid format"
+                  value:
+                    type: string
+                    example: "INVALID-FORMAT"
+
+  responses:
+    BadRequest:
+      description: Bad request - validation error or malformed request
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ValidationError'
+        application/xml:
+          schema:
+            type: string
+
+    Unauthorized:
+      description: Unauthorized - authentication required or failed
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+        application/xml:
+          schema:
+            type: string
+
+    Forbidden:
+      description: Forbidden - insufficient privileges or unauthorized access
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+        application/xml:
+          schema:
+            type: string
+
+    NotFound:
+      description: Not found - resource does not exist
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+        application/xml:
+          schema:
+            type: string
+
+    Conflict:
+      description: Conflict - resource already exists or conflicting state
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+        application/xml:
+          schema:
+            type: string
+
+    PayloadTooLarge:
+      description: Payload too large - request exceeds size limits
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+
+    TooManyRequests:
+      description: Too many requests - rate limit exceeded
+      headers:
+        Retry-After:
+          schema:
+            type: integer
+          description: Seconds to wait before retrying
+        X-RateLimit-Limit:
+          schema:
+            type: integer
+          description: Request limit per time window
+        X-RateLimit-Remaining:
+          schema:
+            type: integer
+          description: Remaining requests in current window
+        X-RateLimit-Reset:
+          schema:
+            type: integer
+          description: Time when rate limit resets (Unix timestamp)
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+
+    ServiceUnavailable:
+      description: Service unavailable - external service dependency failure
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+
+    ExpectationFailed:
+      description: Expectation failed - duplicate data or business rule violation
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
